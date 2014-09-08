@@ -31,6 +31,7 @@ $('[data-hamburger-menu]').veggieburger({
 Have fun! Fix bugs. Don't eat to fast.
 
 ## Todo
+- Make HTML use demo
 - Make hiding by clicking outside the executing element an option, not a default
 - Add option for multiple toggles
 - Add option to make touch direction adjustable
