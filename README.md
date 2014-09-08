@@ -13,7 +13,7 @@ $('[data-hamburger-menu]').veggieburger();
 ```
 
 ###:point_up:What this does
-By default, veggieburger maps the show/hide toggle functionality to an element with the HTML5 data attribute `data-toggle` when clicked, it toggles the class `open` on both the toggle and the element executing the veggieburger.
+By default, veggieburger maps the show/hide toggle functionality to an element with the HTML5 data attribute `data-toggle`: when clicked, it toggles the class `open` on both the toggle and the element executing the veggieburger.
 By default, you can also activate the "hide" function by clicking outside the executing element.
 
 ##With Saus
@@ -23,8 +23,8 @@ Right now, you can choose a specific element for the show/hide toggle, name the 
 ```
 $('[data-hamburger-menu]').veggieburger({    
   toggle: '[data-hamburger-toggle]',    #default [data-toggle]    
-  toggledClass: 'activated'                  #default 'open'   
-  touch: true                                       #default false
+  toggledClass: 'activated',            #default 'open'   
+  touch: true                           #default false
 });
 ```
 
