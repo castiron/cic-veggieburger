@@ -28,7 +28,7 @@ Right now, you can
 $('[data-hamburger-menu]').veggieburger({
   toggle: '[data-hamburger-toggle]',    #default [data-toggle]
   toggledClass: 'activated',            #default 'open'
-  outside: true,            #default false
+  outside: true,                        #default false
   touch: true                           #default false
 });
 ```
