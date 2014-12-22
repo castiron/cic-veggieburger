@@ -1,7 +1,10 @@
 class Veggieburger
   settings =
     toggle: '[data-toggle]',
-    toggledClass: 'open'
+    toggledClass: 'open',
+    # Set outside to true if you want clicks outside the toggleable
+    # elements to close the toggle
+    outside: false,
     # Touch requires TouchSwipe.js and is disabled by default
     # https://github.com/mattbryson/TouchSwipe-Jquery-Plugin
     touch: false
@@ -11,9 +14,12 @@ class Veggieburger
     @settings = $.extend settings, options
     @toggle = $(settings.toggle)
     @toggledClass = settings.toggledClass
+    @outside = settings.outside
+
     @toggleable = [@$el, @toggle]
 
-    console.log settings;
+    # Uncomment this to log settings for debugging
+    # console.log settings;
     @bindToggle()
 
   toggleAll: ->
@@ -26,9 +32,9 @@ class Veggieburger
       @bindClose()
     else
       @unbindClose()
-    
+
   bindToggle: ->
-    @toggle.click( => 
+    @$el.click( =>
       @toggleAll()
     )
 
@@ -42,7 +48,7 @@ class Veggieburger
 
   bindClose: ->
     $('body').bind("mouseup touchend", (e) =>
-      if @outHide(e)
+      if @outside && @outHide(e)
         @toggleAll()
     )
     if settings.touch == true
@@ -57,7 +63,7 @@ class Veggieburger
     if settings.touch == true
       @$el.swipe("disable")
 
-    
-    
+
+
 $.fn.extend
   veggieburger: (options) -> @each -> new Veggieburger(@, options)

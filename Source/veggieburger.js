@@ -6,6 +6,7 @@ Veggieburger = (function() {
   settings = {
     toggle: '[data-toggle]',
     toggledClass: 'open',
+    outside: false,
     touch: false
   };
 
@@ -14,8 +15,8 @@ Veggieburger = (function() {
     this.settings = $.extend(settings, options);
     this.toggle = $(settings.toggle);
     this.toggledClass = settings.toggledClass;
+    this.outside = settings.outside;
     this.toggleable = [this.$el, this.toggle];
-    console.log(settings);
     this.bindToggle();
   }
 
@@ -38,7 +39,7 @@ Veggieburger = (function() {
   };
 
   Veggieburger.prototype.bindToggle = function() {
-    return this.toggle.click((function(_this) {
+    return this.$el.click((function(_this) {
       return function() {
         return _this.toggleAll();
       };
@@ -61,7 +62,7 @@ Veggieburger = (function() {
   Veggieburger.prototype.bindClose = function() {
     $('body').bind("mouseup touchend", (function(_this) {
       return function(e) {
-        if (_this.outHide(e)) {
+        if (_this.outside && _this.outHide(e)) {
           return _this.toggleAll();
         }
       };

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <title>CIC Veggieburger Demo</title>
+
+  <!-- NB: In general, it's not so fun to include inline JS and/or CSS in headers and footers.
+  We do it in this file only for the purposes of keeping the demo all in one file. -->
+  <style type="text/css">
+    /* General, visual styles */
+    body {
+      font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+      font-weight: 300;
+      text-align: center;
+      background-color: #32bfca;
+      margin: 0;
+    }
+
+    .screen-reader-text {
+      border: 0;
+      clip: rect(0 0 0 0);
+      height: 1px;
+      margin: -1px;
+      overflow: hidden;
+      padding: 0;
+      position: absolute;
+      width: 1px;
+    }
+
+    .banner {
+      text-align: left;
+      background-color: #fff;
+      padding: .75em;
+    }
+
+    .veggieburger-link {
+      font-size: 1.2em;
+      font-weight: 600;
+      text-decoration: none;
+      color: #333;
+    }
+
+    .veggieburger-link img {
+      width: 2.632em;
+      padding-right: .3em;
+      display: inline-block;
+      vertical-align: middle;
+    }
+
+    .message {
+      font-size: 8em;
+      color: white;
+      padding: 1em;
+    }
+
+    footer {
+      padding-top: 1.6em;
+      font-size: 3em;
+    }
+
+    footer a {
+      color: #333;
+    }
+
+    /* Veggieburger related display styles */
+    .message .opened {
+      display: none;
+    }
+
+    .message.open .opened {
+      display: inline;
+    }
+
+    .message.open .closed {
+      display: none;
+    }
+  </style>
+
+  <!-- Font awesome is totally not required, but it's used in the demo and it is awesome -->
+  <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <!-- jQuery is required -->
+  <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
+  <script type="text/javascript" src="../Source/veggieburger.js"></script>
+
+  </head>
+
+  <body>
+    <nav class="banner">
+      <!-- This is the element we'll click to "open" the burger -->
+      <a href="#" class="veggieburger-link" data-veggieburger>
+        <img src="https://abs.twimg.com/emoji/v1/72x72/1f354.png" alt="Veggie Burger Button"/>
+        Click This
+      </a>
+    </nav>
+
+    <main>
+        <!-- data-toggle is the default attribute for the element that opens and closes -->
+        <div class="message" data-toggle>
+          <span class="opened">I'm open!</span>
+          <span class="closed">I'm closed</span>
+        </div>
+    </main>
+
+    <footer>
+      <a href="https://github.com/castiron/cic-veggieburger">
+        <i class="fa fa-github"></i><span class="screen-reader-text">CIC-Veggieburger On GitHub</span>
+      </a>
+    </footer>
+  </body>
+
+  <script type="text/javascript">
+    $(document).ready(function(){
+      $('[data-veggieburger]').veggieburger();
+    });
+  </script>
+
+</html>
