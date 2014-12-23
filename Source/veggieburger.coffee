@@ -2,6 +2,8 @@ class Veggieburger
   settings =
     toggle: '[data-toggle]',
     toggledClass: 'open',
+    # Prevent Default can be set to false if necessary
+    preventDefault: true,
     # Set outside to true if you want clicks outside the toggleable
     # elements to close the toggle
     outside: false,
@@ -14,6 +16,7 @@ class Veggieburger
     @settings = $.extend settings, options
     @toggle = $(settings.toggle)
     @toggledClass = settings.toggledClass
+    @prevent = settings.preventDefault
     @outside = settings.outside
 
     @toggleable = [@$el, @toggle]
@@ -34,9 +37,10 @@ class Veggieburger
       @unbindClose()
 
   bindToggle: ->
-    @$el.click( =>
+    @$el.click (event) =>
+      if @prevent
+        event.preventDefault()
       @toggleAll()
-    )
 
   # returns true if event target is outside the toggleable elements
   outHide: (e) ->
