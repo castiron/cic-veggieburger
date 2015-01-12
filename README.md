@@ -22,13 +22,15 @@ Right now, you can
 - Name the class that gets applied when veggieburger is launched
 - Enable default link behavior (if you want, preventDefault is actually the default here)
 - Enable clicking outside the veggieburger/toggled element to close/hide the toggle (good for large site menus)
+- Enable clicking on a separate element to close the hamburger
 - Enable touch to close the menu with a swipe [(requires TouchSwipe.js library to be ordered up separately)](https://github.com/mattbryson/TouchSwipe-Jquery-Plugin).
 
 ```
 $('[data-hamburger-menu]').veggieburger({
   toggle: '[data-hamburger-toggle]',    #default [data-toggle]
   toggledClass: 'activated',            #default 'open'
-  preventDefault: false,                 #default true
+  closer: '[data-hamburger-close]',     #default null
+  preventDefault: false,                #default true
   outside: true,                        #default false
   touch: true                           #default false
 });
@@ -37,7 +39,7 @@ $('[data-hamburger-menu]').veggieburger({
 Have fun! Fix bugs. Don't eat to fast.
 
 ## Todo
-- Add option for multiple toggles
+- Add option for multiple toggles, closers
 - Add option to make touch direction adjustable
 - Add option to make show function executable by swiping (I.E. swipe from out of frame to open)
 - Might be good to make an Angular directive
