@@ -1,2 +1,9 @@
-#Guardfile for compiling coffeescript
-Guardfile
+#Node Sauce
+package.json
+node_modules
+
+#Gulpfile for compiling coffeescript
+gulpfile.js
+
+#IntelliJ meta files
+.idea

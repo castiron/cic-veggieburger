@@ -17,7 +17,7 @@ Veggieburger = (function() {
     this.settings = $.extend(settings, options);
     this.toggle = $(settings.toggle);
     this.toggledClass = settings.toggledClass;
-    this.closer = settings.closer !== null ? $(settings.closer) : null;
+    this.closer = settings.closer !== null ? settings.closer : void 0;
     this.prevent = settings.preventDefault;
     this.outside = settings.outside;
     this.toggleable = [this.$el, this.toggle];

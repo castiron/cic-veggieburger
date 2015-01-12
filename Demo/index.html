@@ -30,20 +30,31 @@
       text-align: left;
       background-color: #fff;
       padding: .75em;
+      position: relative;
     }
 
-    .veggieburger-link {
+    .veggieburger-open {
       font-size: 1.2em;
       font-weight: 600;
       text-decoration: none;
       color: #333;
     }
 
-    .veggieburger-link img {
+    .veggieburger-open img {
       width: 2.632em;
       padding-right: .3em;
       display: inline-block;
       vertical-align: middle;
+    }
+
+    .veggieburger-close {
+      position: absolute;
+      top: 0.8125em;
+      right: 0.6875em;
+    }
+
+    .veggieburger-close img {
+      width: 2.632em;
     }
 
     .message {
@@ -87,9 +98,12 @@
   <body>
     <nav class="banner">
       <!-- This is the element we'll click to "open" the burger -->
-      <a href="#" class="veggieburger-link" data-veggieburger>
+      <a href="#" class="veggieburger-open" data-veggieburger>
         <img src="https://abs.twimg.com/emoji/v1/72x72/1f354.png" alt="Veggie Burger Button"/>
         Click This
+      </a>
+      <a href="#" class="veggieburger-close" data-veggieburger-close>
+        <img src="https://abs.twimg.com/emoji/v1/72x72/1f31a.png" alt="Veggie Burger Alternative Close Toggler"/>
       </a>
     </nav>
 
@@ -102,7 +116,7 @@
     </main>
 
     <footer>
-      <a href="https://github.com/castiron/cic-veggieburger">
+      <a href="https://github.com/castiron/cic-veggieburger" data-close>
         <i class="fa fa-github"></i><span class="screen-reader-text">CIC-Veggieburger On GitHub</span>
       </a>
     </footer>
@@ -110,7 +124,9 @@
 
   <script type="text/javascript">
     $(document).ready(function(){
-      $('[data-veggieburger]').veggieburger();
+      $('[data-veggieburger]').veggieburger({
+        closer: '[data-veggieburger-close]'
+      });
     });
   </script>
 

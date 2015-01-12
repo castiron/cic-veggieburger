@@ -2,6 +2,7 @@ class Veggieburger
   settings =
     toggle: '[data-toggle]',
     toggledClass: 'open',
+    closer: null,
     # Prevent Default can be set to false if necessary
     preventDefault: true,
     # Set outside to true if you want clicks outside the toggleable
@@ -16,6 +17,7 @@ class Veggieburger
     @settings = $.extend settings, options
     @toggle = $(settings.toggle)
     @toggledClass = settings.toggledClass
+    @closer = if settings.closer != null then $(settings.closer) else null
     @prevent = settings.preventDefault
     @outside = settings.outside
 
@@ -61,11 +63,19 @@ class Veggieburger
         swipeLeft: (event, direction) =>
           @toggleAll()
       });
+    if @closer != null
+      @closer.bind("click", (e) =>
+        if @prevent
+          event.preventDefault()
+        @toggleAll()
+    )
 
   unbindClose: ->
     $('body').unbind()
     if settings.touch == true
       @$el.swipe("disable")
+    if @closer != null
+      @closer.unbind()
 
 
 
