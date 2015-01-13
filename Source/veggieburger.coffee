@@ -2,6 +2,8 @@ class Veggieburger
   settings =
     toggle: '[data-toggle]',
     toggledClass: 'open',
+    # Optional closed class can be applied on (and ever after) first close
+    closedClass: null,
     closer: null,
     # Prevent Default can be set to false if necessary
     preventDefault: true,
@@ -17,6 +19,7 @@ class Veggieburger
     @settings = $.extend settings, options
     @toggle = $(settings.toggle)
     @toggledClass = settings.toggledClass
+    @closedClass = if settings.closedClass != null then settings.closedClass else null
     @closer = if settings.closer != null then $(settings.closer) else null
     @prevent = settings.preventDefault
     @outside = settings.outside
@@ -30,6 +33,10 @@ class Veggieburger
   toggleAll: ->
     toggled = false
     for t in @toggleable
+      # If closed class has been applied, toggle it
+      if t.hasClass @closedClass
+        t.toggleClass @closedClass
+      # Always toggle the open class
       t.toggleClass @toggledClass
       if t.hasClass @toggledClass
         toggled = true
@@ -37,6 +44,10 @@ class Veggieburger
       @bindClose()
     else
       @unbindClose()
+      # Add closed class if it's set in the options
+      if @closedClass != null
+        for t in @toggleable
+          t.toggleClass @closedClass
 
   bindToggle: ->
     @$el.click (event) =>

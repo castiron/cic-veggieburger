@@ -6,6 +6,7 @@ Veggieburger = (function() {
   settings = {
     toggle: '[data-toggle]',
     toggledClass: 'open',
+    closedClass: null,
     closer: null,
     preventDefault: true,
     outside: false,
@@ -17,6 +18,7 @@ Veggieburger = (function() {
     this.settings = $.extend(settings, options);
     this.toggle = $(settings.toggle);
     this.toggledClass = settings.toggledClass;
+    this.closedClass = settings.closedClass !== null ? settings.closedClass : null;
     this.closer = settings.closer !== null ? $(settings.closer) : null;
     this.prevent = settings.preventDefault;
     this.outside = settings.outside;
@@ -25,11 +27,14 @@ Veggieburger = (function() {
   }
 
   Veggieburger.prototype.toggleAll = function() {
-    var t, toggled, _i, _len, _ref;
+    var t, toggled, _i, _j, _len, _len1, _ref, _ref1, _results;
     toggled = false;
     _ref = this.toggleable;
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       t = _ref[_i];
+      if (t.hasClass(this.closedClass)) {
+        t.toggleClass(this.closedClass);
+      }
       t.toggleClass(this.toggledClass);
       if (t.hasClass(this.toggledClass)) {
         toggled = true;
@@ -38,7 +43,16 @@ Veggieburger = (function() {
     if (toggled) {
       return this.bindClose();
     } else {
-      return this.unbindClose();
+      this.unbindClose();
+      if (this.closedClass !== null) {
+        _ref1 = this.toggleable;
+        _results = [];
+        for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+          t = _ref1[_j];
+          _results.push(t.toggleClass(this.closedClass));
+        }
+        return _results;
+      }
     }
   };
 
