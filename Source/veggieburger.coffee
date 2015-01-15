@@ -1,35 +1,33 @@
 class Veggieburger
-  settings =
-    toggle: '[data-toggle]',
-    toggledClass: 'open',
+  defaultSettings: ->
+    toggle: '[data-toggle]'
+    toggledClass: 'open'
     # Optional closed class can be applied on (and ever after) first close
-    closedClass: null,
-    closer: null,
+    closedClass: null
+    closer: null
     # Prevent Default can be set to false if necessary
-    preventDefault: true,
+    preventDefault: true
     # Set outside to true if you want clicks outside the toggleable
     # elements to close the toggle
-    outside: false,
+    outside: false
     # Touch requires TouchSwipe.js and is disabled by default
     # https://github.com/mattbryson/TouchSwipe-Jquery-Plugin
     touch: false
 
   constructor: (el, options) ->
     @$el = $(el)
-    @settings = $.extend settings, options
-    @toggle = @multiToggle settings.toggle
-    @toggledClass = settings.toggledClass
-    @closedClass = if settings.closedClass != null then settings.closedClass else null
-    @closer = if settings.closer != null then $(settings.closer) else null
-    @prevent = settings.preventDefault
-    @outside = settings.outside
+    @settings = $.extend @defaultSettings(), options
+    @toggle = @multiToggle @settings.toggle
+    @toggledClass = @settings.toggledClass
+    @closedClass = if @settings.closedClass != null then @settings.closedClass else null
+    @closer = if @settings.closer != null then $(@settings.closer) else null
+    @prevent = @settings.preventDefault
+    @outside = @settings.outside
 
     @toggleable = [@$el]
     # Add initial and additional toggles
     for t in @toggle
       @toggleable.push t
-
-    console.log @toggleable
 
     # Uncomment this to log settings for debugging
     # console.log settings;
@@ -88,7 +86,7 @@ class Veggieburger
       if @outside && @outHide(e)
         @toggleAll()
     )
-    if settings.touch == true
+    if @settings.touch == true
       @$el.swipe("enable")
       @$el.swipe({
         swipeLeft: (event, direction) =>
@@ -103,7 +101,7 @@ class Veggieburger
 
   unbindClose: ->
     $('body').unbind()
-    if settings.touch == true
+    if @settings.touch == true
       @$el.swipe("disable")
     if @closer != null
       @closer.unbind()

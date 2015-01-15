@@ -1,35 +1,34 @@
 var Veggieburger;
 
 Veggieburger = (function() {
-  var settings;
-
-  settings = {
-    toggle: '[data-toggle]',
-    toggledClass: 'open',
-    closedClass: null,
-    closer: null,
-    preventDefault: true,
-    outside: false,
-    touch: false
+  Veggieburger.prototype.defaultSettings = function() {
+    return {
+      toggle: '[data-toggle]',
+      toggledClass: 'open',
+      closedClass: null,
+      closer: null,
+      preventDefault: true,
+      outside: false,
+      touch: false
+    };
   };
 
   function Veggieburger(el, options) {
     var t, _i, _len, _ref;
     this.$el = $(el);
-    this.settings = $.extend(settings, options);
-    this.toggle = this.multiToggle(settings.toggle);
-    this.toggledClass = settings.toggledClass;
-    this.closedClass = settings.closedClass !== null ? settings.closedClass : null;
-    this.closer = settings.closer !== null ? $(settings.closer) : null;
-    this.prevent = settings.preventDefault;
-    this.outside = settings.outside;
+    this.settings = $.extend(this.defaultSettings(), options);
+    this.toggle = this.multiToggle(this.settings.toggle);
+    this.toggledClass = this.settings.toggledClass;
+    this.closedClass = this.settings.closedClass !== null ? this.settings.closedClass : null;
+    this.closer = this.settings.closer !== null ? $(this.settings.closer) : null;
+    this.prevent = this.settings.preventDefault;
+    this.outside = this.settings.outside;
     this.toggleable = [this.$el];
     _ref = this.toggle;
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       t = _ref[_i];
       this.toggleable.push(t);
     }
-    console.log(this.toggleable);
     this.bindToggle();
   }
 
@@ -110,7 +109,7 @@ Veggieburger = (function() {
         }
       };
     })(this));
-    if (settings.touch === true) {
+    if (this.settings.touch === true) {
       this.$el.swipe("enable");
       this.$el.swipe({
         swipeLeft: (function(_this) {
@@ -134,7 +133,7 @@ Veggieburger = (function() {
 
   Veggieburger.prototype.unbindClose = function() {
     $('body').unbind();
-    if (settings.touch === true) {
+    if (this.settings.touch === true) {
       this.$el.swipe("disable");
     }
     if (this.closer !== null) {
