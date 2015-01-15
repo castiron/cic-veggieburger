@@ -14,17 +14,39 @@ Veggieburger = (function() {
   };
 
   function Veggieburger(el, options) {
+    var t, _i, _len, _ref;
     this.$el = $(el);
     this.settings = $.extend(settings, options);
-    this.toggle = $(settings.toggle);
+    this.toggle = this.multiToggle(settings.toggle);
     this.toggledClass = settings.toggledClass;
     this.closedClass = settings.closedClass !== null ? settings.closedClass : null;
     this.closer = settings.closer !== null ? $(settings.closer) : null;
     this.prevent = settings.preventDefault;
     this.outside = settings.outside;
-    this.toggleable = [this.$el, this.toggle];
+    this.toggleable = [this.$el];
+    _ref = this.toggle;
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      t = _ref[_i];
+      this.toggleable.push(t);
+    }
+    console.log(this.toggleable);
     this.bindToggle();
   }
+
+  Veggieburger.prototype.multiToggle = function(setting) {
+    var result, s, _i, _len;
+    result = [];
+    if (Object.prototype.toString.call(setting) === '[object Array]') {
+      for (_i = 0, _len = setting.length; _i < _len; _i++) {
+        s = setting[_i];
+        result.push($(s));
+      }
+      return result;
+    } else {
+      result.push($(setting));
+      return result;
+    }
+  };
 
   Veggieburger.prototype.toggleAll = function() {
     var t, toggled, _i, _j, _len, _len1, _ref, _ref1, _results;

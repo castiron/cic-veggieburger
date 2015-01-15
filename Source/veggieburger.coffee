@@ -17,18 +17,38 @@ class Veggieburger
   constructor: (el, options) ->
     @$el = $(el)
     @settings = $.extend settings, options
-    @toggle = $(settings.toggle)
+    @toggle = @multiToggle settings.toggle
     @toggledClass = settings.toggledClass
     @closedClass = if settings.closedClass != null then settings.closedClass else null
     @closer = if settings.closer != null then $(settings.closer) else null
     @prevent = settings.preventDefault
     @outside = settings.outside
 
-    @toggleable = [@$el, @toggle]
+    @toggleable = [@$el]
+    # Add initial and additional toggles
+    for t in @toggle
+      @toggleable.push t
+
+    console.log @toggleable
 
     # Uncomment this to log settings for debugging
     # console.log settings;
     @bindToggle()
+
+  # For assigning additional toggleable elements
+  # Pass in a setting and get back an array with one or more jQuery objects
+  multiToggle: (setting) ->
+    result = []
+    # Using pre IE 8 pattern for maximum compatibility
+    if Object.prototype.toString.call(setting) == '[object Array]'
+      # Multiple result
+      for s in setting
+        result.push $(s)
+      return result
+    else
+      # Singular result
+      result.push $(setting)
+      return result
 
   toggleAll: ->
     toggled = false

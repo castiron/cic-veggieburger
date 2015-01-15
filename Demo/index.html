@@ -84,6 +84,16 @@
     .message.open .closed {
       display: none;
     }
+
+    .secondary {
+      font-size: 1.3em;
+      color: white;
+      visibility: hidden;
+    }
+
+    .secondary.open {
+      visibility: visible;
+    }
   </style>
 
   <!-- Font awesome is totally not required, but it's used in the demo and it is awesome -->
@@ -113,6 +123,9 @@
           <span class="opened">I'm open!</span>
           <span class="closed">I'm closed</span>
         </div>
+        <div class="secondary" data-toggle-secondary>
+          I am too!
+        </div>
     </main>
 
     <footer>
@@ -125,6 +138,7 @@
   <script type="text/javascript">
     $(document).ready(function(){
       $('[data-veggieburger]').veggieburger({
+        toggle: ['[data-toggle]', '[data-toggle-secondary]'],
         closer: '[data-veggieburger-close]'
       });
     });
