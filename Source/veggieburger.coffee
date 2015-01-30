@@ -96,7 +96,7 @@ class Veggieburger
           @toggleAll()
       });
     if @closer != null
-      @closer.bind("click", (e) =>
+      @closer.bind("click", (event) =>
         if @prevent
           if(event.preventDefault)
             event.preventDefault();

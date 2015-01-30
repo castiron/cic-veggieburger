@@ -125,7 +125,7 @@ Veggieburger = (function() {
     }
     if (this.closer !== null) {
       return this.closer.bind("click", (function(_this) {
-        return function(e) {
+        return function(event) {
           if (_this.prevent) {
             if (event.preventDefault) {
               event.preventDefault();
