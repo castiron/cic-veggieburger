@@ -70,7 +70,10 @@ class Veggieburger
   bindToggle: ->
     @$el.click (event) =>
       if @prevent
-        event.preventDefault()
+        if(event.preventDefault)
+          event.preventDefault();
+        else
+          event.returnValue = false;
       @toggleAll()
 
   # returns true if event target is outside the toggleable elements
@@ -95,7 +98,10 @@ class Veggieburger
     if @closer != null
       @closer.bind("click", (e) =>
         if @prevent
-          event.preventDefault()
+          if(event.preventDefault)
+            event.preventDefault();
+          else
+            event.returnValue = false;
         @toggleAll()
     )
 

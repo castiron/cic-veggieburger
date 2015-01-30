@@ -81,7 +81,11 @@ Veggieburger = (function() {
     return this.$el.click((function(_this) {
       return function(event) {
         if (_this.prevent) {
-          event.preventDefault();
+          if (event.preventDefault) {
+            event.preventDefault();
+          } else {
+            event.returnValue = false;
+          }
         }
         return _this.toggleAll();
       };
@@ -123,7 +127,11 @@ Veggieburger = (function() {
       return this.closer.bind("click", (function(_this) {
         return function(e) {
           if (_this.prevent) {
-            event.preventDefault();
+            if (event.preventDefault) {
+              event.preventDefault();
+            } else {
+              event.returnValue = false;
+            }
           }
           return _this.toggleAll();
         };
