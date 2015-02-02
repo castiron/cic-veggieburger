@@ -4,11 +4,13 @@ class Veggieburger
     toggledClass: 'open'
     # Optional closed class can be applied on (and ever after) first close
     closedClass: null
+    # Additional "closer" element can be specified
     closer: null
+    # Set one or more keys to trigger a "close-only" toggle
+    closeKeys: null
     # Prevent Default can be set to false if necessary
     preventDefault: true
-    # Set outside to true if you want clicks outside the toggleable
-    # elements to close the toggle
+    # If true, clicks outside the toggleable elements will "close" the toggle
     outside: false
     # Touch requires TouchSwipe.js and is disabled by default
     # https://github.com/mattbryson/TouchSwipe-Jquery-Plugin
@@ -23,11 +25,26 @@ class Veggieburger
     @closer = if @settings.closer != null then $(@settings.closer) else null
     @prevent = @settings.preventDefault
     @outside = @settings.outside
-
     @toggleable = [@$el]
     # Add initial and additional toggles
     for t in @toggle
       @toggleable.push t
+
+    # Setup an array for one or more close keys, if there are any
+    if @settings.closeKeys != null
+      if (Number(@settings.closeKeys)==@settings.closeKeys && @settings.closeKeys%1==0) && Object.prototype.toString.call(@settings.closeKeys) != '[object Array]'
+        # CloseKeys is a single number
+        @closeKeys = [@settings.closeKeys]
+      else if Object.prototype.toString.call(@settings.closeKeys) == '[object Array]'
+        # CloseKeys is an array
+        @closeKeys = @settings.closeKeys
+      else
+        # CloseKeys is/are invalid
+        @closeKeys = null
+    else
+      @closeKeys = null
+
+    console.log @closeKeys
 
     # Uncomment this to log settings for debugging
     # console.log settings;
@@ -84,6 +101,13 @@ class Veggieburger
         hit = false
     return hit
 
+  # Requires fat arrow as it's being called within a $(document) event
+  keyClose: (e) =>
+    console.log e.keyCode
+    console.log $.inArray(e.keyCode, @closeKeys)
+    if $.inArray(e.keyCode, @closeKeys) != -1
+      @toggleAll()
+
   bindClose: ->
     $('body').bind("mouseup touchend", (e) =>
       if @outside && @outHide(e)
@@ -104,6 +128,9 @@ class Veggieburger
             event.returnValue = false;
         @toggleAll()
     )
+    if @closeKeys != null
+      $(document).keyup @keyClose
+
 
   unbindClose: ->
     $('body').unbind()
@@ -111,7 +138,8 @@ class Veggieburger
       @$el.swipe("disable")
     if @closer != null
       @closer.unbind()
-
+    if @closeKeys != null
+      $(document).unbind("keyup", @keyClose)
 
 
 $.fn.extend

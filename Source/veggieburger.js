@@ -1,4 +1,5 @@
-var Veggieburger;
+var Veggieburger,
+  __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
 Veggieburger = (function() {
   Veggieburger.prototype.defaultSettings = function() {
@@ -7,6 +8,7 @@ Veggieburger = (function() {
       toggledClass: 'open',
       closedClass: null,
       closer: null,
+      closeKeys: null,
       preventDefault: true,
       outside: false,
       touch: false
@@ -14,6 +16,7 @@ Veggieburger = (function() {
   };
 
   function Veggieburger(el, options) {
+    this.keyClose = __bind(this.keyClose, this);
     var t, _i, _len, _ref;
     this.$el = $(el);
     this.settings = $.extend(this.defaultSettings(), options);
@@ -29,6 +32,18 @@ Veggieburger = (function() {
       t = _ref[_i];
       this.toggleable.push(t);
     }
+    if (this.settings.closeKeys !== null) {
+      if ((Number(this.settings.closeKeys) === this.settings.closeKeys && this.settings.closeKeys % 1 === 0) && Object.prototype.toString.call(this.settings.closeKeys) !== '[object Array]') {
+        this.closeKeys = [this.settings.closeKeys];
+      } else if (Object.prototype.toString.call(this.settings.closeKeys) === '[object Array]') {
+        this.closeKeys = this.settings.closeKeys;
+      } else {
+        this.closeKeys = null;
+      }
+    } else {
+      this.closeKeys = null;
+    }
+    console.log(this.closeKeys);
     this.bindToggle();
   }
 
@@ -105,6 +120,14 @@ Veggieburger = (function() {
     return hit;
   };
 
+  Veggieburger.prototype.keyClose = function(e) {
+    console.log(e.keyCode);
+    console.log($.inArray(e.keyCode, this.closeKeys));
+    if ($.inArray(e.keyCode, this.closeKeys) !== -1) {
+      return this.toggleAll();
+    }
+  };
+
   Veggieburger.prototype.bindClose = function() {
     $('body').bind("mouseup touchend", (function(_this) {
       return function(e) {
@@ -124,7 +147,7 @@ Veggieburger = (function() {
       });
     }
     if (this.closer !== null) {
-      return this.closer.bind("click", (function(_this) {
+      this.closer.bind("click", (function(_this) {
         return function(event) {
           if (_this.prevent) {
             if (event.preventDefault) {
@@ -137,6 +160,9 @@ Veggieburger = (function() {
         };
       })(this));
     }
+    if (this.closeKeys !== null) {
+      return $(document).keyup(this.keyClose);
+    }
   };
 
   Veggieburger.prototype.unbindClose = function() {
@@ -145,7 +171,10 @@ Veggieburger = (function() {
       this.$el.swipe("disable");
     }
     if (this.closer !== null) {
-      return this.closer.unbind();
+      this.closer.unbind();
+    }
+    if (this.closeKeys !== null) {
+      return $(document).unbind("keyup", this.keyClose);
     }
   };
 
