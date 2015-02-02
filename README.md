@@ -21,6 +21,7 @@ Right now, you can
 - Choose a specific element for the show/hide toggle
 - Name the class that gets applied when veggieburger is launched
 - Add an optional "closed" class that gets applied once the veggieburger is closed, and re-applied on close ever after: This is helpful for CSS animations that you want to run on a secondary interaction, but not on the initial state
+- Trigger a "close-toggle" on one or more key presses
 - Enable default link behavior (if you want, preventDefault is actually the default here)
 - Enable clicking outside the veggieburger/toggled element to close/hide the toggle (good for large site menus)
 - Enable clicking on a separate element to close the hamburger
@@ -32,6 +33,7 @@ $('[data-hamburger-menu]').veggieburger({
   toggledClass: 'activated',            #default 'open'
   closedClass: 'closed',                #default null
   closer: '[data-hamburger-close]',     #default null
+  closeKeys: [27, 70]                  #default null, option can be either a single integer or an array of integers
   preventDefault: false,                #default true
   outside: true,                        #default false
   touch: true                           #default false
