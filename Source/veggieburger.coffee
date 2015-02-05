@@ -44,8 +44,6 @@ class Veggieburger
     else
       @closeKeys = null
 
-    console.log @closeKeys
-
     # Uncomment this to log settings for debugging
     # console.log settings;
     @bindToggle()
@@ -103,8 +101,6 @@ class Veggieburger
 
   # Requires fat arrow as it's being called within a $(document) event
   keyClose: (e) =>
-    console.log e.keyCode
-    console.log $.inArray(e.keyCode, @closeKeys)
     if $.inArray(e.keyCode, @closeKeys) != -1
       @toggleAll()
 

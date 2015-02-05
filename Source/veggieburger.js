@@ -43,7 +43,6 @@ Veggieburger = (function() {
     } else {
       this.closeKeys = null;
     }
-    console.log(this.closeKeys);
     this.bindToggle();
   }
 
@@ -121,8 +120,6 @@ Veggieburger = (function() {
   };
 
   Veggieburger.prototype.keyClose = function(e) {
-    console.log(e.keyCode);
-    console.log($.inArray(e.keyCode, this.closeKeys));
     if ($.inArray(e.keyCode, this.closeKeys) !== -1) {
       return this.toggleAll();
     }
