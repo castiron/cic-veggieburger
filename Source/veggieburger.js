@@ -4,11 +4,11 @@ var Veggieburger,
 Veggieburger = (function() {
   Veggieburger.prototype.defaultSettings = function() {
     return {
+      triggers: null,
       toggle: '[data-toggle]',
-      childToggle: null,
       toggledClass: 'open',
       closedClass: null,
-      closer: null,
+      closers: null,
       closeKeys: null,
       preventDefault: true,
       outside: false,
@@ -18,22 +18,16 @@ Veggieburger = (function() {
 
   function Veggieburger(el, options) {
     this.keyClose = __bind(this.keyClose, this);
-    var t, _i, _len, _ref;
     this.$el = $(el);
     this.settings = $.extend(this.defaultSettings(), options);
-    this.toggle = this.multiToggle(this.settings.toggle, false).concat(this.multiToggle(this.settings.childToggle, true));
+    this.triggers = this.settings.triggers !== null ? this.multiSet(this.settings.triggers) : [$(this.$el.find(':button')[0])];
+    this.toggleable = this.multiSet(this.settings.toggle);
+    this.toggleable = this.toggleable.concat(this.triggers);
+    this.closers = this.settings.closers !== null ? this.multiSet(this.settings.closers) : null;
     this.toggledClass = this.settings.toggledClass;
     this.closedClass = this.settings.closedClass !== null ? this.settings.closedClass : null;
-    this.closer = this.settings.closer !== null ? $(this.settings.closer) : null;
     this.prevent = this.settings.preventDefault;
     this.outside = this.settings.outside;
-    this.toggleable = [this.$el];
-    _ref = this.toggle;
-    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-      t = _ref[_i];
-      this.toggleable.push(t);
-    }
-    console.log(this.toggleable);
     if (this.settings.closeKeys !== null) {
       if ((Number(this.settings.closeKeys) === this.settings.closeKeys && this.settings.closeKeys % 1 === 0) && Object.prototype.toString.call(this.settings.closeKeys) !== '[object Array]') {
         this.closeKeys = [this.settings.closeKeys];
@@ -48,27 +42,19 @@ Veggieburger = (function() {
     this.bindToggle();
   }
 
-  Veggieburger.prototype.multiToggle = function(setting, child) {
+  Veggieburger.prototype.multiSet = function(setting) {
     var result, s, _i, _len;
     result = [];
     if (Object.prototype.toString.call(setting) === '[object Array]') {
       for (_i = 0, _len = setting.length; _i < _len; _i++) {
         s = setting[_i];
-        if (child) {
-          result.push(this.$el.find(s));
-        } else {
-          result.push($(s));
-        }
+        result.push(this.$el.find(s));
       }
       return result;
     } else {
-      if (child) {
-        result.push(this.$el.find(setting));
-      } else {
-        result.push($(setting));
-      }
-      return result;
+      result.push(this.$el.find(setting));
     }
+    return result;
   };
 
   Veggieburger.prototype.toggleAll = function() {
@@ -102,18 +88,25 @@ Veggieburger = (function() {
   };
 
   Veggieburger.prototype.bindToggle = function() {
-    return this.$el.click((function(_this) {
-      return function(event) {
-        if (_this.prevent) {
-          if (event.preventDefault) {
-            event.preventDefault();
-          } else {
-            event.returnValue = false;
+    var t, _i, _len, _ref, _results;
+    _ref = this.triggers;
+    _results = [];
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      t = _ref[_i];
+      _results.push(t.click((function(_this) {
+        return function(event) {
+          if (_this.prevent) {
+            if (event.preventDefault) {
+              event.preventDefault();
+            } else {
+              event.returnValue = false;
+            }
           }
-        }
-        return _this.toggleAll();
-      };
-    })(this));
+          return _this.toggleAll();
+        };
+      })(this)));
+    }
+    return _results;
   };
 
   Veggieburger.prototype.outHide = function(e) {
@@ -136,6 +129,7 @@ Veggieburger = (function() {
   };
 
   Veggieburger.prototype.bindClose = function() {
+    var c, _i, _len, _ref;
     $('body').bind("mouseup touchend", (function(_this) {
       return function(e) {
         if (_this.outside && _this.outHide(e)) {
@@ -153,19 +147,23 @@ Veggieburger = (function() {
         })(this)
       });
     }
-    if (this.closer !== null) {
-      this.closer.bind("click", (function(_this) {
-        return function(event) {
-          if (_this.prevent) {
-            if (event.preventDefault) {
-              event.preventDefault();
-            } else {
-              event.returnValue = false;
+    if (this.closers !== null) {
+      _ref = this.closers;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        c = _ref[_i];
+        c.bind("click", (function(_this) {
+          return function(event) {
+            if (_this.prevent) {
+              if (event.preventDefault) {
+                event.preventDefault();
+              } else {
+                event.returnValue = false;
+              }
             }
-          }
-          return _this.toggleAll();
-        };
-      })(this));
+            return _this.toggleAll();
+          };
+        })(this));
+      }
     }
     if (this.closeKeys !== null) {
       return $(document).keyup(this.keyClose);
@@ -173,12 +171,17 @@ Veggieburger = (function() {
   };
 
   Veggieburger.prototype.unbindClose = function() {
+    var c, _i, _len, _ref;
     $('body').unbind();
     if (this.settings.touch === true) {
       this.$el.swipe("disable");
     }
-    if (this.closer !== null) {
-      this.closer.unbind();
+    if (this.closers !== null) {
+      _ref = this.closers;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        c = _ref[_i];
+        c.unbind();
+      }
     }
     if (this.closeKeys !== null) {
       return $(document).unbind("keyup", this.keyClose);

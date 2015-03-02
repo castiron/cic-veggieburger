@@ -106,29 +106,27 @@
   </head>
 
   <body>
-    <nav class="banner">
-      <!-- This is the element we'll click to "open" the burger -->
-      <a href="#" class="veggieburger-open" data-veggieburger>
-        <img src="https://abs.twimg.com/emoji/v1/72x72/1f354.png" alt="Veggie Burger Button"/>
-        Click This
-        <span data-toggle-status>Children can be toggled too.</span><span data-toggle-child>And this one.</span>
-      </a>
-      <a href="#" class="veggieburger-close" data-veggieburger-close>
-        <img src="https://abs.twimg.com/emoji/v1/72x72/1f31a.png" alt="Veggie Burger Alternative Close Toggler"/>
-      </a>
-    </nav>
+    <div data-veggieburger>
+      <nav class="banner">
+        <!-- This is the element we'll click to "open" the burger -->
+        <a href="#" class="veggieburger-open" data-veggieburger-open>
+          <img src="https://abs.twimg.com/emoji/v1/72x72/1f354.png" alt="Veggie Burger Button"/>
+          Click This
+        </a>
+        <a href="#" class="veggieburger-close" data-veggieburger-close>
+          <img src="https://abs.twimg.com/emoji/v1/72x72/1f31a.png" alt="Veggie Burger Alternative Close Toggler"/>
+        </a>
+      </nav>
 
-    <main>
-        <!-- data-toggle is the default attribute for the element that opens and closes -->
-        <div class="message" data-toggle>
-          <span class="opened">I'm open!</span>
-          <span class="closed">I'm closed</span>
-        </div>
-        <div class="secondary" data-toggle-secondary>
-          I am too!
-        </div>
-        <span data-toggle-status>This status doesn't do anything because it's not a child element</span>
-    </main>
+      <!-- data-toggle is the default attribute for the element that opens and closes -->
+      <div class="message" data-toggle>
+        <span class="opened">I'm open!</span>
+        <span class="closed">I'm closed</span>
+      </div>
+      <div class="secondary" data-toggle-secondary>
+        I am too!
+      </div>
+    </div>
 
     <footer>
       <a href="https://github.com/castiron/cic-veggieburger" data-close>
@@ -140,10 +138,12 @@
   <script type="text/javascript">
     $(document).ready(function(){
       $('[data-veggieburger]').veggieburger({
+        triggers: '[data-veggieburger-open]',
         toggle: ['[data-toggle]', '[data-toggle-secondary]'],
-        childToggle: ['[data-toggle-status]', '[data-toggle-child]'],
-        closer: '[data-veggieburger-close]',
-        closeKeys: [27, 70]
+        closers: '[data-veggieburger-close]',
+        outside: true,
+        closedClass: 'closed',
+        closeKeys: 27
       });
     });
   </script>

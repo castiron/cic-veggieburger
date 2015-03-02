@@ -1,12 +1,12 @@
 class Veggieburger
   defaultSettings: ->
+    triggers: null
     toggle: '[data-toggle]'
-    childToggle: null
     toggledClass: 'open'
     # Optional closed class can be applied on (and ever after) first close
     closedClass: null
     # Additional "closer" element can be specified
-    closer: null
+    closers: null
     # Set one or more keys to trigger a "close-only" toggle
     closeKeys: null
     # Prevent Default can be set to false if necessary
@@ -20,20 +20,16 @@ class Veggieburger
   constructor: (el, options) ->
     @$el = $(el)
     @settings = $.extend @defaultSettings(), options
-    # Use multiToggle function to add additional toggles as arrays for each toggle type
-    @toggle = @multiToggle(@settings.toggle, false).concat(@multiToggle(@settings.childToggle, true))
+    @triggers = if @settings.triggers != null then @multiSet @settings.triggers else [$(@$el.find(':button')[0])]
+    # Use multiset function to add one or more toggleable elements, and add any triggers
+    @toggleable = @multiSet @settings.toggle
+    @toggleable = @toggleable.concat @triggers
+    # Assign closers but only if there are any
+    @closers = if @settings.closers != null then @multiSet @settings.closers else null
     @toggledClass = @settings.toggledClass
     @closedClass = if @settings.closedClass != null then @settings.closedClass else null
-    @closer = if @settings.closer != null then $(@settings.closer) else null
     @prevent = @settings.preventDefault
     @outside = @settings.outside
-    @toggleable = [@$el]
-
-    # Add initial and additional toggles
-    for t in @toggle
-      @toggleable.push t
-
-    console.log @toggleable
 
     # Setup an array for one or more close keys, if there are any
     if @settings.closeKeys != null
@@ -53,28 +49,20 @@ class Veggieburger
     # console.log settings;
     @bindToggle()
 
-  # For assigning additional toggleable elements
-  # Pass in a setting and get back an array with one or more jQuery objects
-  multiToggle: (setting, child) ->
+  # For assigning additional multiple triggers and/or toggleable elements
+  # Simply pass in a setting and get back an array with one or more jQuery objects
+  multiSet: (setting) ->
     result = []
     # Using pre IE 8 pattern for maximum compatibility
     if Object.prototype.toString.call(setting) == '[object Array]'
       # Multiple result
       for s in setting
-        if child
-          # For child selections, push a jQuery object within the toggle element
           result.push @$el.find(s)
-        else
-          # For standard selections, push the plain old jQuery object selector
-          result.push $(s)
       return result
     else
       # Singular result
-      if child
-        result.push @$el.find(setting)
-      else
-        result.push $(setting)
-      return result
+      result.push @$el.find(setting)
+    return result
 
   toggleAll: ->
     toggled = false
@@ -96,13 +84,14 @@ class Veggieburger
           t.toggleClass @closedClass
 
   bindToggle: ->
-    @$el.click (event) =>
-      if @prevent
-        if(event.preventDefault)
-          event.preventDefault();
-        else
-          event.returnValue = false;
-      @toggleAll()
+    for t in @triggers
+      t.click (event) =>
+        if @prevent
+          if(event.preventDefault)
+            event.preventDefault();
+          else
+            event.returnValue = false;
+        @toggleAll()
 
   # returns true if event target is outside the toggleable elements
   outHide: (e) ->
@@ -128,14 +117,15 @@ class Veggieburger
         swipeLeft: (event, direction) =>
           @toggleAll()
       });
-    if @closer != null
-      @closer.bind("click", (event) =>
-        if @prevent
-          if(event.preventDefault)
-            event.preventDefault();
-          else
-            event.returnValue = false;
-        @toggleAll()
+    if @closers != null
+      for c in @closers
+        c.bind("click", (event) =>
+          if @prevent
+            if(event.preventDefault)
+              event.preventDefault();
+            else
+              event.returnValue = false;
+          @toggleAll()
     )
     if @closeKeys != null
       $(document).keyup @keyClose
@@ -145,8 +135,9 @@ class Veggieburger
     $('body').unbind()
     if @settings.touch == true
       @$el.swipe("disable")
-    if @closer != null
-      @closer.unbind()
+    if @closers != null
+      for c in @closers
+        c.unbind()
     if @closeKeys != null
       $(document).unbind("keyup", @keyClose)
 
