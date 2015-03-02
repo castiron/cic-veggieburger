@@ -5,6 +5,7 @@ Veggieburger = (function() {
   Veggieburger.prototype.defaultSettings = function() {
     return {
       toggle: '[data-toggle]',
+      childToggle: null,
       toggledClass: 'open',
       closedClass: null,
       closer: null,
@@ -20,7 +21,7 @@ Veggieburger = (function() {
     var t, _i, _len, _ref;
     this.$el = $(el);
     this.settings = $.extend(this.defaultSettings(), options);
-    this.toggle = this.multiToggle(this.settings.toggle);
+    this.toggle = this.multiToggle(this.settings.toggle, false).concat(this.multiToggle(this.settings.childToggle, true));
     this.toggledClass = this.settings.toggledClass;
     this.closedClass = this.settings.closedClass !== null ? this.settings.closedClass : null;
     this.closer = this.settings.closer !== null ? $(this.settings.closer) : null;
@@ -32,6 +33,7 @@ Veggieburger = (function() {
       t = _ref[_i];
       this.toggleable.push(t);
     }
+    console.log(this.toggleable);
     if (this.settings.closeKeys !== null) {
       if ((Number(this.settings.closeKeys) === this.settings.closeKeys && this.settings.closeKeys % 1 === 0) && Object.prototype.toString.call(this.settings.closeKeys) !== '[object Array]') {
         this.closeKeys = [this.settings.closeKeys];
@@ -46,17 +48,25 @@ Veggieburger = (function() {
     this.bindToggle();
   }
 
-  Veggieburger.prototype.multiToggle = function(setting) {
+  Veggieburger.prototype.multiToggle = function(setting, child) {
     var result, s, _i, _len;
     result = [];
     if (Object.prototype.toString.call(setting) === '[object Array]') {
       for (_i = 0, _len = setting.length; _i < _len; _i++) {
         s = setting[_i];
-        result.push($(s));
+        if (child) {
+          result.push(this.$el.find(s));
+        } else {
+          result.push($(s));
+        }
       }
       return result;
     } else {
-      result.push($(setting));
+      if (child) {
+        result.push(this.$el.find(setting));
+      } else {
+        result.push($(setting));
+      }
       return result;
     }
   };

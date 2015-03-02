@@ -1,6 +1,7 @@
 class Veggieburger
   defaultSettings: ->
     toggle: '[data-toggle]'
+    childToggle: null
     toggledClass: 'open'
     # Optional closed class can be applied on (and ever after) first close
     closedClass: null
@@ -19,16 +20,20 @@ class Veggieburger
   constructor: (el, options) ->
     @$el = $(el)
     @settings = $.extend @defaultSettings(), options
-    @toggle = @multiToggle @settings.toggle
+    # Use multiToggle function to add additional toggles as arrays for each toggle type
+    @toggle = @multiToggle(@settings.toggle, false).concat(@multiToggle(@settings.childToggle, true))
     @toggledClass = @settings.toggledClass
     @closedClass = if @settings.closedClass != null then @settings.closedClass else null
     @closer = if @settings.closer != null then $(@settings.closer) else null
     @prevent = @settings.preventDefault
     @outside = @settings.outside
     @toggleable = [@$el]
+
     # Add initial and additional toggles
     for t in @toggle
       @toggleable.push t
+
+    console.log @toggleable
 
     # Setup an array for one or more close keys, if there are any
     if @settings.closeKeys != null
@@ -50,17 +55,25 @@ class Veggieburger
 
   # For assigning additional toggleable elements
   # Pass in a setting and get back an array with one or more jQuery objects
-  multiToggle: (setting) ->
+  multiToggle: (setting, child) ->
     result = []
     # Using pre IE 8 pattern for maximum compatibility
     if Object.prototype.toString.call(setting) == '[object Array]'
       # Multiple result
       for s in setting
-        result.push $(s)
+        if child
+          # For child selections, push a jQuery object within the toggle element
+          result.push @$el.find(s)
+        else
+          # For standard selections, push the plain old jQuery object selector
+          result.push $(s)
       return result
     else
       # Singular result
-      result.push $(setting)
+      if child
+        result.push @$el.find(setting)
+      else
+        result.push $(setting)
       return result
 
   toggleAll: ->

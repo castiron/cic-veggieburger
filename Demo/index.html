@@ -111,6 +111,7 @@
       <a href="#" class="veggieburger-open" data-veggieburger>
         <img src="https://abs.twimg.com/emoji/v1/72x72/1f354.png" alt="Veggie Burger Button"/>
         Click This
+        <span data-toggle-status>Children can be toggled too.</span><span data-toggle-child>And this one.</span>
       </a>
       <a href="#" class="veggieburger-close" data-veggieburger-close>
         <img src="https://abs.twimg.com/emoji/v1/72x72/1f31a.png" alt="Veggie Burger Alternative Close Toggler"/>
@@ -126,6 +127,7 @@
         <div class="secondary" data-toggle-secondary>
           I am too!
         </div>
+        <span data-toggle-status>This status doesn't do anything because it's not a child element</span>
     </main>
 
     <footer>
@@ -139,6 +141,7 @@
     $(document).ready(function(){
       $('[data-veggieburger]').veggieburger({
         toggle: ['[data-toggle]', '[data-toggle-secondary]'],
+        childToggle: ['[data-toggle-status]', '[data-toggle-child]'],
         closer: '[data-veggieburger-close]',
         closeKeys: [27, 70]
       });
