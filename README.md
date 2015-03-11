@@ -52,7 +52,7 @@ attribute `[data-toggle]`. It also toggles the class `open` on both `$('[data-to
 The veggieburger is extensible with your choice of toppings.
 Right now, you can
 - `trigger` Choose one or more specific elements to act as the toggle trigger
-- `toggle` Choose oen or more specific element for the open/close class toggle
+- `toggle` Choose one or more specific element for the open/close class toggle
 - `toggledClass` Name the class that gets applied when the veggieburger trigger is used
 - `closedClass` Add an optional "closed" class that gets applied once the veggieburger is closed, and re-applied on close ever after: This is helpful for CSS animations that you want to run on a secondary interaction, but not on the initial state
 - `closers` Enable clicking on one or more separate element to close the hamburger
