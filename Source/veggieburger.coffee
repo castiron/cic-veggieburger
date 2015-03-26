@@ -11,7 +11,8 @@ class Veggieburger
     closeKeys: null
     # Prevent Default can be set to false if necessary
     preventDefault: true
-    # If true, clicks outside the toggleable elements will "close" the toggle
+    # If true, clicks outside the toggleable elements will "close" the toggle,
+    # can also be set to specific set of objects inner instead of all toggleable elements
     outside: false
     # Touch requires TouchSwipe.js and is disabled by default
     # https://github.com/mattbryson/TouchSwipe-Jquery-Plugin
@@ -29,7 +30,8 @@ class Veggieburger
     @toggledClass = @settings.toggledClass
     @closedClass = if @settings.closedClass != null then @settings.closedClass else null
     @prevent = @settings.preventDefault
-    @outside = @settings.outside
+    # Outside is set as either a set of selectors or a boolean value
+    @outside = if typeof @settings.outside != 'boolean' then @multiSet @settings.outside else @settings.outside
 
     # Setup an array for one or more close keys, if there are any
     if @settings.closeKeys != null
@@ -96,9 +98,17 @@ class Veggieburger
   # returns true if event target is outside the toggleable elements
   outHide: (e) ->
     hit = true
-    for t in @toggleable
-      if $(e.target).closest(t).length
-        hit = false
+    # If outside is set with a non-boolean value
+    if typeof @outside != 'boolean' && @outside
+      for o in @outside
+        if $(e.target).closest(o).length
+          hit = false
+
+    # Check for outside hits on all toggleable elements if outside is a boolean value
+    if typeof @outside == 'boolean' && @outside
+      for t in @toggleable
+        if $(e.target).closest(t).length
+          hit = false
     return hit
 
   # Requires fat arrow as it's being called within a $(document) event

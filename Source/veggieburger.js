@@ -27,7 +27,7 @@ Veggieburger = (function() {
     this.toggledClass = this.settings.toggledClass;
     this.closedClass = this.settings.closedClass !== null ? this.settings.closedClass : null;
     this.prevent = this.settings.preventDefault;
-    this.outside = this.settings.outside;
+    this.outside = typeof this.settings.outside !== 'boolean' ? this.multiSet(this.settings.outside) : this.settings.outside;
     if (this.settings.closeKeys !== null) {
       if ((Number(this.settings.closeKeys) === this.settings.closeKeys && this.settings.closeKeys % 1 === 0) && Object.prototype.toString.call(this.settings.closeKeys) !== '[object Array]') {
         this.closeKeys = [this.settings.closeKeys];
@@ -110,13 +110,24 @@ Veggieburger = (function() {
   };
 
   Veggieburger.prototype.outHide = function(e) {
-    var hit, t, _i, _len, _ref;
+    var hit, o, t, _i, _j, _len, _len1, _ref, _ref1;
     hit = true;
-    _ref = this.toggleable;
-    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-      t = _ref[_i];
-      if ($(e.target).closest(t).length) {
-        hit = false;
+    if (typeof this.outside !== 'boolean' && this.outside) {
+      _ref = this.outside;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        o = _ref[_i];
+        if ($(e.target).closest(o).length) {
+          hit = false;
+        }
+      }
+    }
+    if (typeof this.outside === 'boolean' && this.outside) {
+      _ref1 = this.toggleable;
+      for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+        t = _ref1[_j];
+        if ($(e.target).closest(t).length) {
+          hit = false;
+        }
       }
     }
     return hit;
