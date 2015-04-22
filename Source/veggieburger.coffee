@@ -17,6 +17,9 @@ class Veggieburger
     # Touch requires TouchSwipe.js and is disabled by default
     # https://github.com/mattbryson/TouchSwipe-Jquery-Plugin
     touch: false
+    # Function to run when veggieburger is toggled on
+    onToggleOn: ->
+
 
   constructor: (el, options) ->
     @$el = $(el)
@@ -32,6 +35,9 @@ class Veggieburger
     @prevent = @settings.preventDefault
     # Outside is set as either a set of selectors or a boolean value
     @outside = if typeof @settings.outside != 'boolean' then @multiSet @settings.outside else @settings.outside
+
+    # Assign callbacks from options if they are functions
+    @onToggleOn = if typeof @settings.onToggleOn == 'function' then @settings.onToggleOn else () ->
 
     # Setup an array for one or more close keys, if there are any
     if @settings.closeKeys != null
@@ -77,6 +83,8 @@ class Veggieburger
       if t.hasClass @toggledClass
         toggled = true
     if toggled
+      # Run Toggle On Callback
+      @onToggleOn.call(@)
       @bindClose()
     else
       @unbindClose()

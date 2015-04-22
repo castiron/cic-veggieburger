@@ -85,6 +85,11 @@
       display: none;
     }
 
+    .message .callback {
+      font-size: .5em;
+      display: block;
+    }
+
     .secondary {
       font-size: 1.3em;
       color: white;
@@ -122,6 +127,7 @@
       <div class="message" data-toggle>
         <span class="opened">I'm open!</span>
         <span class="closed">I'm closed</span>
+        <span class="callback" data-callback>I change color on open</span>
       </div>
       <div class="secondary" data-toggle-secondary>
         I am too!
@@ -142,7 +148,10 @@
         toggle: ['[data-toggle]', '[data-toggle-secondary]'],
         closers: '[data-veggieburger-close]',
         closedClass: 'closed',
-        closeKeys: 27
+        closeKeys: 27,
+        onToggleOn: function(){
+          $('[data-callback]').css('color', '#66757f');
+        }
       });
     });
   </script>

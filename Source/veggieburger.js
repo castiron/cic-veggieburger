@@ -12,7 +12,8 @@ Veggieburger = (function() {
       closeKeys: null,
       preventDefault: true,
       outside: false,
-      touch: false
+      touch: false,
+      onToggleOn: function() {}
     };
   };
 
@@ -28,6 +29,7 @@ Veggieburger = (function() {
     this.closedClass = this.settings.closedClass !== null ? this.settings.closedClass : null;
     this.prevent = this.settings.preventDefault;
     this.outside = typeof this.settings.outside !== 'boolean' ? this.multiSet(this.settings.outside) : this.settings.outside;
+    this.onToggleOn = typeof this.settings.onToggleOn === 'function' ? this.settings.onToggleOn : function() {};
     if (this.settings.closeKeys !== null) {
       if ((Number(this.settings.closeKeys) === this.settings.closeKeys && this.settings.closeKeys % 1 === 0) && Object.prototype.toString.call(this.settings.closeKeys) !== '[object Array]') {
         this.closeKeys = [this.settings.closeKeys];
@@ -72,6 +74,7 @@ Veggieburger = (function() {
       }
     }
     if (toggled) {
+      this.onToggleOn.call(this);
       return this.bindClose();
     } else {
       this.unbindClose();
