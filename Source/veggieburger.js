@@ -74,7 +74,7 @@ Veggieburger = (function() {
       }
     }
     if (toggled) {
-      this.onToggleOn.call(this);
+      this.onToggleOn.call(this.$el);
       return this.bindClose();
     } else {
       this.unbindClose();

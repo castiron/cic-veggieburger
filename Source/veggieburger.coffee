@@ -84,7 +84,7 @@ class Veggieburger
         toggled = true
     if toggled
       # Run Toggle On Callback
-      @onToggleOn.call(@)
+      @onToggleOn.call(@$el)
       @bindClose()
     else
       @unbindClose()
