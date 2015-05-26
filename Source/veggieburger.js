@@ -13,7 +13,8 @@ Veggieburger = (function() {
       preventDefault: true,
       outside: false,
       touch: false,
-      onToggleOn: function() {}
+      onToggleOn: function() {},
+      onToggleOff: function() {}
     };
   };
 
@@ -30,6 +31,7 @@ Veggieburger = (function() {
     this.prevent = this.settings.preventDefault;
     this.outside = typeof this.settings.outside !== 'boolean' ? this.multiSet(this.settings.outside) : this.settings.outside;
     this.onToggleOn = typeof this.settings.onToggleOn === 'function' ? this.settings.onToggleOn : function() {};
+    this.onToggleOff = typeof this.settings.onToggleOff === 'function' ? this.settings.onToggleOff : function() {};
     if (this.settings.closeKeys !== null) {
       if ((Number(this.settings.closeKeys) === this.settings.closeKeys && this.settings.closeKeys % 1 === 0) && Object.prototype.toString.call(this.settings.closeKeys) !== '[object Array]') {
         this.closeKeys = [this.settings.closeKeys];
@@ -77,6 +79,7 @@ Veggieburger = (function() {
       this.onToggleOn.call(this.$el);
       return this.bindClose();
     } else {
+      this.onToggleOff.call(this.$el);
       this.unbindClose();
       if (this.closedClass !== null) {
         _ref1 = this.toggleable;

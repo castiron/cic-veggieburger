@@ -151,6 +151,9 @@
         closeKeys: 27,
         onToggleOn: function(){
           $('[data-callback]').css('color', '#66757f');
+        },
+        onToggleOff: function(){
+          $('[data-callback]').text('And my text on close');
         }
       });
     });
