@@ -99,6 +99,11 @@
     .secondary.open {
       visibility: visible;
     }
+
+    .height-transition {
+      display: none;
+      overflow: hidden;
+    }
   </style>
 
   <!-- Font awesome is totally not required, but it's used in the demo and it is awesome -->
@@ -132,6 +137,9 @@
       <div class="secondary" data-toggle-secondary>
         I am too!
       </div>
+      <div class="height-transition" data-height-transition>
+        Once upon a time transitions were only done as part of CSS classes...
+      </div>
     </div>
 
     <footer>
@@ -146,6 +154,7 @@
       $('[data-veggieburger]').veggieburger({
         triggers: '[data-veggieburger-open]',
         toggle: ['[data-toggle]', '[data-toggle-secondary]'],
+        transitionHeight: '[data-height-transition]',
         closers: '[data-veggieburger-close]',
         closedClass: 'closed',
         closeKeys: 27,

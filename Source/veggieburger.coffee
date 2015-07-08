@@ -9,6 +9,9 @@ class Veggieburger
     closers: null
     # Set one or more keys to trigger a "close-only" toggle
     closeKeys: null
+    # Transition one/more elements height or width with jQuery instead of your class
+    transitionHeight: null
+    transitionSpeed: 200
     # Prevent Default can be set to false if necessary
     preventDefault: true
     # If true, clicks outside the toggleable elements will "close" the toggle,
@@ -26,9 +29,17 @@ class Veggieburger
     @$el = $(el)
     @settings = $.extend @defaultSettings(), options
     @triggers = if @settings.triggers != null then @multiSet @settings.triggers else [$(@$el.find(':button')[0])]
+    # Also keep track of elements with transitions
+    @transitionHeight = if @settings.transitionHeight != null then @multiSet @settings.transitionHeight else null
+
     # Use multiset function to add one or more toggleable elements, and add any triggers
     @toggleable = @multiSet @settings.toggle
     @toggleable = @toggleable.concat @triggers
+
+    @transitionSpeed = @settings.transitionSpeed
+
+    if @transitionHeight != null then @toggleable = @toggleable.concat @transitionHeight
+
     # Assign closers but only if there are any
     @closers = if @settings.closers != null then @multiSet @settings.closers else null
     @toggledClass = @settings.toggledClass
@@ -96,6 +107,30 @@ class Veggieburger
       if @closedClass != null
         for t in @toggleable
           t.toggleClass @closedClass
+
+    for th in @transitionHeight
+      if th.hasClass @toggledClass
+        @transitionOpenHeight(th)
+      else
+        @transitionCloseHeight(th)
+
+  transitionOpenHeight: (element) ->
+    element.css {
+      display: 'inherit',
+      height: 'auto'
+    }
+    $openHeight = element.outerHeight()
+    element.css 'height', 0
+    element.animate({
+      height: $openHeight
+    }, @transitionSpeed, ()->
+      element.css('height', 'auto')
+    )
+
+  transitionCloseHeight: (element) ->
+    element.animate({
+      height: 0
+    }, @transitionSpeed)
 
   bindToggle: ->
     for t in @triggers
