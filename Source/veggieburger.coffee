@@ -108,11 +108,12 @@ class Veggieburger
         for t in @toggleable
           t.toggleClass @closedClass
 
-    for th in @transitionHeight
-      if th.hasClass @toggledClass
-        @transitionOpenHeight(th)
-      else
-        @transitionCloseHeight(th)
+    if @transitionHeight
+      for th in @transitionHeight
+        if th.hasClass @toggledClass
+          @transitionOpenHeight(th)
+        else
+          @transitionCloseHeight(th)
 
   transitionOpenHeight: (element) ->
     element.css {

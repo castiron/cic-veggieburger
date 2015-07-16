@@ -96,17 +96,19 @@ Veggieburger = (function() {
         }
       }
     }
-    _ref2 = this.transitionHeight;
-    _results = [];
-    for (_k = 0, _len2 = _ref2.length; _k < _len2; _k++) {
-      th = _ref2[_k];
-      if (th.hasClass(this.toggledClass)) {
-        _results.push(this.transitionOpenHeight(th));
-      } else {
-        _results.push(this.transitionCloseHeight(th));
+    if (this.transitionHeight) {
+      _ref2 = this.transitionHeight;
+      _results = [];
+      for (_k = 0, _len2 = _ref2.length; _k < _len2; _k++) {
+        th = _ref2[_k];
+        if (th.hasClass(this.toggledClass)) {
+          _results.push(this.transitionOpenHeight(th));
+        } else {
+          _results.push(this.transitionCloseHeight(th));
+        }
       }
+      return _results;
     }
-    return _results;
   };
 
   Veggieburger.prototype.transitionOpenHeight = function(element) {
