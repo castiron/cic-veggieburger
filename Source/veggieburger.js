@@ -41,11 +41,12 @@ Veggieburger = (function() {
     if (this.transitionHeight !== null) {
       this.toggleable = this.toggleable.concat(this.transitionHeight);
     }
-    if (this.settings.hash) {
+    if (this.settings.hash && this.$el.find(this.settings.hash)) {
       hashKey = this.util.snakeToCamel(this.settings.hash.substring(6, this.settings.hash.length - 1));
-      this.hash = $(this.settings.hash).data(hashKey);
+      this.hash = this.$el.find(this.settings.hash).data(hashKey);
     } else {
       this.hash = null;
+      console.log('A hash was set, but could not be found within the element');
     }
     this.closers = this.settings.closers !== null ? this.multiSet(this.settings.closers) : null;
     this.toggledClass = this.settings.toggledClass;
