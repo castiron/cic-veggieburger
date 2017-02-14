@@ -1,6 +1,9 @@
 class Veggieburger
   defaultSettings: ->
     triggers: null
+    # Optional data-selector to use a URL has to auto-toggle
+    # The veggie burger on load
+    hash: null
     toggle: '[data-toggle]'
     toggledClass: 'open'
     # Optional closed class can be applied on (and ever after) first close
@@ -24,8 +27,13 @@ class Veggieburger
     onToggleOn: ->
     onToggleOff: ->
 
-
   constructor: (el, options) ->
+    # Utility methods
+    @util = {
+      snakeToCamel: (string) ->
+        string.replace(/(\-\w)/g, (m) -> m[1].toUpperCase())
+    }
+
     @$el = $(el)
     @settings = $.extend @defaultSettings(), options
     @triggers = if @settings.triggers != null then @multiSet @settings.triggers else [$(@$el.find(':button')[0])]
@@ -39,6 +47,13 @@ class Veggieburger
     @transitionSpeed = @settings.transitionSpeed
 
     if @transitionHeight != null then @toggleable = @toggleable.concat @transitionHeight
+
+    # Setup burger hash (or slaw) if the selector has been passed as an option
+    if @settings.hash
+      hashKey = @util.snakeToCamel(@settings.hash.substring(6, @settings.hash.length - 1))
+      @hash = $(@settings.hash).data(hashKey)
+    else
+      @hash = null
 
     # Assign closers but only if there are any
     @closers = if @settings.closers != null then @multiSet @settings.closers else null
@@ -68,6 +83,7 @@ class Veggieburger
 
     # Uncomment this to log settings for debugging
     # console.log settings;
+    @maybeToggleOnLoad()
     @bindToggle()
 
   # For assigning additional multiple triggers and/or toggleable elements
@@ -132,6 +148,12 @@ class Veggieburger
     element.animate({
       height: 0
     }, @transitionSpeed)
+
+  maybeToggleOnLoad: ->
+    if @hash
+      # Toggle on load if the hash has a match in the URL
+      if ~location.hash.toLowerCase().indexOf(@hash)
+        @toggleAll()
 
   bindToggle: ->
     for t in @triggers
