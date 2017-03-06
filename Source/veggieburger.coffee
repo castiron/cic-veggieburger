@@ -26,6 +26,7 @@ class Veggieburger
     # Functions to run when veggieburger is toggled
     onToggleOn: ->
     onToggleOff: ->
+    afterHeightOff: ->
 
   constructor: (el, options) ->
     # Utility methods
@@ -67,6 +68,7 @@ class Veggieburger
     # Assign callbacks from options if they are functions
     @onToggleOn = if typeof @settings.onToggleOn == 'function' then @settings.onToggleOn else () ->
     @onToggleOff = if typeof @settings.onToggleOff == 'function' then @settings.onToggleOff else () ->
+    @afterHeightOff = if typeof @settings.afterHeightOff == 'function' then @settings.afterHeightOff else () ->
 
     # Setup an array for one or more close keys, if there are any
     if @settings.closeKeys != null
@@ -130,7 +132,7 @@ class Veggieburger
         if th.hasClass @toggledClass
           @transitionOpenHeight(th)
         else
-          @transitionCloseHeight(th)
+          @transitionCloseHeight(th, event)
 
   transitionOpenHeight: (element) ->
     element.css {
@@ -145,10 +147,12 @@ class Veggieburger
       element.css('height', 'auto')
     )
 
-  transitionCloseHeight: (element) ->
+  transitionCloseHeight: (element, event) ->
     element.animate({
       height: 0
-    }, @transitionSpeed)
+    }, @transitionSpeed, () =>
+      # Run Toggle On Callback
+      @afterHeightOff.call(element, event))
 
   maybeToggleOnLoad: ->
     if @hash

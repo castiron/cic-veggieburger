@@ -17,7 +17,8 @@ Veggieburger = (function() {
       outside: false,
       touch: false,
       onToggleOn: function() {},
-      onToggleOff: function() {}
+      onToggleOff: function() {},
+      afterHeightOff: function() {}
     };
   };
 
@@ -55,6 +56,7 @@ Veggieburger = (function() {
     this.outside = typeof this.settings.outside !== 'boolean' ? this.multiSet(this.settings.outside) : this.settings.outside;
     this.onToggleOn = typeof this.settings.onToggleOn === 'function' ? this.settings.onToggleOn : function() {};
     this.onToggleOff = typeof this.settings.onToggleOff === 'function' ? this.settings.onToggleOff : function() {};
+    this.afterHeightOff = typeof this.settings.afterHeightOff === 'function' ? this.settings.afterHeightOff : function() {};
     if (this.settings.closeKeys !== null) {
       if ((Number(this.settings.closeKeys) === this.settings.closeKeys && this.settings.closeKeys % 1 === 0) && Object.prototype.toString.call(this.settings.closeKeys) !== '[object Array]') {
         this.closeKeys = [this.settings.closeKeys];
@@ -121,7 +123,7 @@ Veggieburger = (function() {
         if (th.hasClass(this.toggledClass)) {
           results.push(this.transitionOpenHeight(th));
         } else {
-          results.push(this.transitionCloseHeight(th));
+          results.push(this.transitionCloseHeight(th, event));
         }
       }
       return results;
@@ -143,10 +145,14 @@ Veggieburger = (function() {
     });
   };
 
-  Veggieburger.prototype.transitionCloseHeight = function(element) {
+  Veggieburger.prototype.transitionCloseHeight = function(element, event) {
     return element.animate({
       height: 0
-    }, this.transitionSpeed);
+    }, this.transitionSpeed, (function(_this) {
+      return function() {
+        return _this.afterHeightOff.call(element, event);
+      };
+    })(this));
   };
 
   Veggieburger.prototype.maybeToggleOnLoad = function() {

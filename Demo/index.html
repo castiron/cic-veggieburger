@@ -157,6 +157,9 @@
         hash: '[data-veggieburger-hash]',
         toggle: ['[data-toggle]', '[data-toggle-secondary]'],
         transitionHeight: '[data-height-transition]',
+        afterHeightOff: function(target) {
+          console.log('The height transition just ended!');
+        },
         closers: '[data-veggieburger-close]',
         closedClass: 'closed',
         closeKeys: 27,
