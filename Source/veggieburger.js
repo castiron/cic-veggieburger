@@ -87,7 +87,7 @@ Veggieburger = (function() {
     return result;
   };
 
-  Veggieburger.prototype.toggleAll = function() {
+  Veggieburger.prototype.toggleAll = function(event) {
     var i, j, k, len, len1, len2, ref, ref1, ref2, results, t, th, toggled;
     toggled = false;
     ref = this.toggleable;
@@ -146,6 +146,7 @@ Veggieburger = (function() {
   };
 
   Veggieburger.prototype.transitionCloseHeight = function(element, event) {
+    console.log(event, 'the event');
     return element.animate({
       height: 0
     }, this.transitionSpeed, (function(_this) {
@@ -178,7 +179,7 @@ Veggieburger = (function() {
               event.returnValue = false;
             }
           }
-          return _this.toggleAll();
+          return _this.toggleAll(event);
         };
       })(this)));
     }
@@ -211,7 +212,7 @@ Veggieburger = (function() {
 
   Veggieburger.prototype.keyClose = function(e) {
     if ($.inArray(e.keyCode, this.closeKeys) !== -1) {
-      return this.toggleAll();
+      return this.toggleAll(e);
     }
   };
 
@@ -220,7 +221,7 @@ Veggieburger = (function() {
     $('body').bind("mouseup touchend", (function(_this) {
       return function(e) {
         if (_this.outside && _this.outHide(e)) {
-          return _this.toggleAll();
+          return _this.toggleAll(e);
         }
       };
     })(this));
@@ -229,7 +230,7 @@ Veggieburger = (function() {
       this.$el.swipe({
         swipeLeft: (function(_this) {
           return function(event, direction) {
-            return _this.toggleAll();
+            return _this.toggleAll(event);
           };
         })(this)
       });
@@ -247,7 +248,7 @@ Veggieburger = (function() {
                 event.returnValue = false;
               }
             }
-            return _this.toggleAll();
+            return _this.toggleAll(event);
           };
         })(this));
       }

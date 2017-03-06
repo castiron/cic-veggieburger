@@ -104,7 +104,7 @@ class Veggieburger
       result.push @$el.find(setting)
     return result
 
-  toggleAll: ->
+  toggleAll: (event) ->
     toggled = false
     for t in @toggleable
       # If closed class has been applied, toggle it
@@ -168,7 +168,7 @@ class Veggieburger
             event.preventDefault();
           else
             event.returnValue = false;
-        @toggleAll()
+        @toggleAll(event)
 
   # returns true if event target is outside the toggleable elements
   outHide: (e) ->
@@ -189,18 +189,18 @@ class Veggieburger
   # Requires fat arrow as it's being called within a $(document) event
   keyClose: (e) =>
     if $.inArray(e.keyCode, @closeKeys) != -1
-      @toggleAll()
+      @toggleAll(e)
 
   bindClose: ->
     $('body').bind("mouseup touchend", (e) =>
       if @outside && @outHide(e)
-        @toggleAll()
+        @toggleAll(e)
     )
     if @settings.touch == true
       @$el.swipe("enable")
       @$el.swipe({
         swipeLeft: (event, direction) =>
-          @toggleAll()
+          @toggleAll(event)
       });
     if @closers != null
       for c in @closers
@@ -210,7 +210,7 @@ class Veggieburger
               event.preventDefault();
             else
               event.returnValue = false;
-          @toggleAll()
+          @toggleAll(event)
     )
     if @closeKeys != null
       $(document).keyup @keyClose
