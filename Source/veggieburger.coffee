@@ -151,7 +151,7 @@ class Veggieburger
     element.animate({
       height: 0
     }, @transitionSpeed, () =>
-      # Run Toggle On Callback
+      # Run Height Off Callback
       @afterHeightOff.call(element, event))
 
   maybeToggleOnLoad: ->
