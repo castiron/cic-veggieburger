@@ -50,12 +50,12 @@ class Veggieburger
     if @transitionHeight != null then @toggleable = @toggleable.concat @transitionHeight
 
     # Setup burger hash (or slaw) if the selector has been passed as an option
-    if @settings.hash && @$el.find(@settings.hash)
+    @hash = null
+    if @settings.hash && @$el.find(@settings.hash).length > 0
       hashKey = @util.snakeToCamel(@settings.hash.substring(6, @settings.hash.length - 1))
       @hash = @$el.find(@settings.hash).data(hashKey)
-    else
-      @hash = null
-      console.log('A hash was set, but could not be found within the element');
+    else if @settings.hash
+      console.log('A hash was set on the plugin, but could not be found within the element')
 
     # Assign closers but only if there are any
     @closers = if @settings.closers != null then @multiSet @settings.closers else null

@@ -42,12 +42,12 @@ Veggieburger = (function() {
     if (this.transitionHeight !== null) {
       this.toggleable = this.toggleable.concat(this.transitionHeight);
     }
-    if (this.settings.hash && this.$el.find(this.settings.hash)) {
+    this.hash = null;
+    if (this.settings.hash && this.$el.find(this.settings.hash).length > 0) {
       hashKey = this.util.snakeToCamel(this.settings.hash.substring(6, this.settings.hash.length - 1));
       this.hash = this.$el.find(this.settings.hash).data(hashKey);
-    } else {
-      this.hash = null;
-      console.log('A hash was set, but could not be found within the element');
+    } else if (this.settings.hash) {
+      console.log('A hash was set on the plugin, but could not be found within the element');
     }
     this.closers = this.settings.closers !== null ? this.multiSet(this.settings.closers) : null;
     this.toggledClass = this.settings.toggledClass;
@@ -146,7 +146,6 @@ Veggieburger = (function() {
   };
 
   Veggieburger.prototype.transitionCloseHeight = function(element, event) {
-    console.log(event, 'the event');
     return element.animate({
       height: 0
     }, this.transitionSpeed, (function(_this) {
