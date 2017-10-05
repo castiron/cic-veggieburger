@@ -46,6 +46,7 @@ Veggieburger = (function() {
     if (this.settings.hash && this.$el.find(this.settings.hash).length > 0) {
       hashKey = this.util.snakeToCamel(this.settings.hash.substring(6, this.settings.hash.length - 1));
       this.hash = this.$el.find(this.settings.hash).data(hashKey);
+      this.hash = this.hash.split(' ');
     } else if (this.settings.hash) {
       console.log('A hash was set on the plugin, but could not be found within the element');
     }
@@ -156,8 +157,15 @@ Veggieburger = (function() {
   };
 
   Veggieburger.prototype.maybeToggleOnLoad = function() {
+    var anyMatch;
     if (this.hash) {
-      if (~location.hash.toLowerCase().indexOf(this.hash)) {
+      anyMatch = false;
+      $(this.hash).each(function() {
+        if (~location.hash.toLowerCase().indexOf(this)) {
+          return anyMatch = true;
+        }
+      });
+      if (anyMatch) {
         return this.toggleAll();
       }
     }

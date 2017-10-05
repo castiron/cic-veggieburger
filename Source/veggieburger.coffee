@@ -53,7 +53,9 @@ class Veggieburger
     @hash = null
     if @settings.hash && @$el.find(@settings.hash).length > 0
       hashKey = @util.snakeToCamel(@settings.hash.substring(6, @settings.hash.length - 1))
+      # Hash is always broken into an array in case there is more than one
       @hash = @$el.find(@settings.hash).data(hashKey)
+      @hash = @hash.split(' ')
     else if @settings.hash
       console.log('A hash was set on the plugin, but could not be found within the element')
 
@@ -156,9 +158,14 @@ class Veggieburger
 
   maybeToggleOnLoad: ->
     if @hash
+      anyMatch = false
+
+      $(@hash).each () ->
+        if ~location.hash.toLowerCase().indexOf(@)
+          anyMatch = true
+
       # Toggle on load if the hash has a match in the URL
-      if ~location.hash.toLowerCase().indexOf(@hash)
-        @toggleAll()
+      if anyMatch then @toggleAll()
 
   bindToggle: ->
     for t in @triggers
